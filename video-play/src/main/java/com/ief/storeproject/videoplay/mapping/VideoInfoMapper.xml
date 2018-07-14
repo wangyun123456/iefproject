@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ief.storeproject.videoplay.mapping.VideoInfoMapper">
+  <resultMap id="BaseResultMap" type="com.ief.storeproject.videoplay.mapping.entity.VideoInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="video_name" jdbcType="VARCHAR" property="videoName" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    <result column="video_url" jdbcType="VARCHAR" property="videoUrl" />
+    <result column="video_type" jdbcType="VARCHAR" property="videoType" />
+    <result column="video_img" jdbcType="VARCHAR" property="videoImg" />
+    <result column="video_produce" jdbcType="VARCHAR" property="videoProduce" />
+    <result column="video_time" jdbcType="INTEGER" property="videoTime" />
+    <result column="play_num" jdbcType="BIGINT" property="playNum" />
+    <result column="data_version" jdbcType="BIGINT" property="dataVersion" />
+    <result column="delete_flag" jdbcType="SMALLINT" property="deleteFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, video_name,group_id, video_url, video_type, video_img, video_produce, play_num,video_time, data_version, 
+    delete_flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from video_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="com.ief.storeproject.videoplay.mapping.entity.VideoInfo">
+    insert into video_info (id, video_name,video_name, video_url, 
+      video_type, video_img, video_produce, 
+      play_num,video_time, data_version, delete_flag
+      )
+    values (#{id,jdbcType=INTEGER}, #{videoName,jdbcType=VARCHAR}, #{groupId,jdbcType=INTEGER}, #{videoUrl,jdbcType=VARCHAR}, 
+      #{videoType,jdbcType=VARCHAR}, #{videoImg,jdbcType=VARCHAR}, #{videoProduce,jdbcType=VARCHAR}, #{playNum,jdbcType=BIGINT},
+      #{videoTime,jdbcType=INTEGER}, #{dataVersion,jdbcType=BIGINT}, #{deleteFlag,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ief.storeproject.videoplay.mapping.entity.VideoInfo">
+    insert into video_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="videoName != null">
+        video_name,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="videoUrl != null">
+        video_url,
+      </if>
+      <if test="videoType != null">
+        video_type,
+      </if>
+      <if test="videoImg != null">
+        video_img,
+      </if>
+      <if test="videoProduce != null">
+        video_produce,
+      </if>
+      <if test="playNum != null">
+        play_num,
+      </if>
+      <if test="videoTime != null">
+        video_time,
+      </if>
+      <if test="dataVersion != null">
+        data_version,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="videoName != null">
+        #{videoName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="videoUrl != null">
+        #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoType != null">
+        #{videoType,jdbcType=VARCHAR},
+      </if>
+      <if test="videoImg != null">
+        #{videoImg,jdbcType=VARCHAR},
+      </if>
+      <if test="videoProduce != null">
+        #{videoProduce,jdbcType=VARCHAR},
+      </if>
+      <if test="playNum != null">
+        #{playNum,jdbcType=BIGINT},
+      </if>
+      <if test="videoTime != null">
+        #{videoTime,jdbcType=INTEGER},
+      </if>
+      <if test="dataVersion != null">
+        #{dataVersion,jdbcType=BIGINT},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ief.storeproject.videoplay.mapping.entity.VideoInfo">
+    update video_info
+    <set>
+      <if test="videoName != null">
+        video_name = #{videoName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="videoUrl != null">
+        video_url = #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoType != null">
+        video_type = #{videoType,jdbcType=VARCHAR},
+      </if>
+      <if test="videoImg != null">
+        video_img = #{videoImg,jdbcType=VARCHAR},
+      </if>
+      <if test="videoProduce != null">
+        video_produce = #{videoProduce,jdbcType=VARCHAR},
+      </if>
+      <if test="playNum != null">
+        play_num = #{playNum,jdbcType=BIGINT},
+      </if>
+      <if test="videoTime != null">
+        video_time = #{videoTime,jdbcType=INTEGER},
+      </if>
+      <if test="dataVersion != null">
+        data_version = #{dataVersion,jdbcType=BIGINT} + 1,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+    <if test="dataVersion != null">
+        and data_version = #{dataVersion,jdbcType=INTEGER}
+    </if>
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ief.storeproject.videoplay.mapping.entity.VideoInfo">
+    update video_info
+    set 
+      video_name = #{videoName,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=INTEGER},
+      video_url = #{videoUrl,jdbcType=VARCHAR},
+      video_type = #{videoType,jdbcType=VARCHAR},
+      video_img = #{videoImg,jdbcType=VARCHAR},
+      video_produce = #{videoProduce,jdbcType=VARCHAR},
+      play_num = #{playNum,jdbcType=BIGINT},
+      video_time = #{videoTime,jdbcType=INTEGER},
+      data_version = #{dataVersion,jdbcType=BIGINT},
+      delete_flag = #{deleteFlag,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update video_info set delete_flag=1
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <select id="selectByExample" parameterType="com.ief.storeproject.videoplay.mapping.entity.VideoInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from video_info
+    <where>
+      <if test="videoName != null">
+        and video_name = #{videoName,jdbcType=VARCHAR}
+      </if>
+      <if test="groupId != null">
+        and group_id = #{groupId,jdbcType=INTEGER}
+      </if>
+      <if test="videoUrl != null">
+        and video_url = #{videoUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="videoType != null">
+        and video_type = #{videoType,jdbcType=VARCHAR}
+      </if>
+      <if test="videoImg != null">
+        and video_img = #{videoImg,jdbcType=VARCHAR}
+      </if>
+      <if test="playNum != null">
+        and play_num = #{playNum,jdbcType=BIGINT}
+      </if>
+      <if test="videoTime != null">
+        and video_time = #{videoTime,jdbcType=INTEGER}
+      </if>
+      <if test="deleteFlag != null">
+        and delete_flag = #{deleteFlag,jdbcType=SMALLINT}
+      </if>
+    </where>
+  </select>
+</mapper>

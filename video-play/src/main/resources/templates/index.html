@@ -1,0 +1,55 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Video.js 6.2.8</title>
+    <link href="js/video6.6.2.js/css/video-js.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #191919
+        }
+
+        .m {
+            width: 740px;
+            height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 100px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="m">
+    <!--<OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"-->
+            <!--codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"-->
+            <!--WIDTH="550" HEIGHT="400">-->
+        <!--<PARAM VALUE="/video/Forrest Gump IMAX.mp4">-->
+        <!--<PARAM VALUE="high">-->
+        <!--<PARAM VALUE="#FFFFFF">-->
+        <!--<EMBED src="/video/Forrest Gump IMAX.mp4" quality="high" bgcolor="#FFFFFF" WIDTH="550" HEIGHT="400"-->
+               <!--NAME="/video/Forrest Gump IMAX.mp4" ALIGN="" TYPE="application/x-shockwave-flash"-->
+               <!--PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer">-->
+        <!--</EMBED>-->
+    <!--</OBJECT>-->
+    <video id="my-video" class="video-js" controls preload="auto" width="740" height="400"
+           poster="m.png" data-setup="{}">
+        <source src="/video/Forrest Gump IMAX.mp4" type="video/mp4">
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a web browser that
+            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+        </p>
+    </video>
+    <script src="js/video6.6.2.js/js/video.min.js"></script>
+    <script type="text/javascript">
+        var myPlayer = videojs('my-video');
+        videojs.options.flash.swf = "../js/video6.6.2.js/js/video-js.swf";
+        videojs("my-video").ready(function () {
+            var myPlayer = this;
+            myPlayer.play();
+        });
+    </script>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>视频列表</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" th:href="@{/css/videoGroup/videolist.css}"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=37342703"
+            th:src="@{http://tajs.qq.com/stats?sId=37342703}" charset="UTF-8"></script>
+    <link rel="stylesheet" href="/css/style.css" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="/css/frozenui.css" th:href="@{/css/frozenui.css}"/>
+</head>
+<body>
+<div th:if="${#lists.isEmpty(videos)}">无数据</div>
+<div class="demo-block">
+    <div th:unless="${#lists.isEmpty(videos)}">
+        <ul class="ui-list ui-border-tb" th:each="video : ${videos}">
+            <li th:onclick="'javascript:get_video_info(this)'" th:attr="id=${video.id}">
+                <div class="ui-list-img-horizontal"><span
+                        th:attr="style='background-image:url('+@{${video.videoImg}}+')'"></span></div>
+                <div class="ui-list-info ui-border-t">
+                    <p th:text="${video.videoName}" class="ui-nowrap">视频名称</p>
+                    <p th:text="${#strings.abbreviate(video.videoProduce,34)}" class="ui-nowrap">视频介绍</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<script src="/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:inline="javascript">
+    function get_video_info(el) {
+        var id = $(el).attr('id');
+        var basePath = [[@{/video/getVideo/}]]+id;
+//        console.log(basePath)
+        window.location.href=basePath;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
+    <title th:text="${video.videoName}">Title</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/video-js.min.css}">
+</head>
+<body oncontextmenu="window.event.returnValue=false">
+<script th:src="@{/js/video.min.js}"></script>
+<script th:src="@{/js/ie8/videojs-ie8.min.js}"></script>
+<video id="video" class="video-js vjs-default-skin vjs-fluid vjs-big-play-centered" controls="true" preload="none"
+       width="100%" th:attr="poster=@{${video.videoImg}}"
+       data-setup='{}'>
+    <source th:attr="src=@{${video.videoUrl}},type=${video.videoType}"/>
+</video>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:inline="javascript">
+    var flag = true;
+    var historyId = [[${video.historyId}]];
+    var player = videojs('video', {}, function () {
+//            player.currentTime([[${video.playTime}]] 0);
+//            this.play(); // if you don't trust autoplay for some reason
+    });
+    player.on('play', function () {
+        //从上次播放时间开始
+        player.currentTime(/*[[${video.playTime}]]*/ 0);
+        console.log("开始播放");
+        var data;
+        if (historyId != null) {
+            data = {id: historyId, startTime: new Date()};
+        } else {
+            data = {
+                userId: 1,
+                videoId: [[${video.id}]],
+                startTime: new Date()
+            };
+        }
+        saveStatus(data);
+    });
+    player.on('firstplay', function () {
+        console.log("第一次播放");
+        if (historyId != null) {
+            data = {
+                id: historyId,
+                startTime: new Date(),
+                isFirstPlay:'true'
+            };
+        } else {
+            data = {
+                userId: 1,
+                videoId: [[${video.id}]],
+                startTime: new Date(),
+                isFirstPlay:'true'
+            };
+        }
+        saveStatus(data);
+    });
+    player.on('pause', function () {
+        console.log("暂停播放");
+        pauseOrEndPlay();
+    });
+    player.on('ended', function () {
+        pauseOrEndPlay();
+        console.log("结束播放");
+    });
+    player.on('timeupdate', function () {
+        var timeAt = parseInt(player.currentTime());
+        console.log("当前播放到：" + timeAt);
+        if (timeAt % 5 != 0) {
+            flag = true;
+        }
+        if (timeAt % 5 == 0 && timeAt != 0 && flag) {
+            //每5秒存储当前播放时间
+            var data;
+            if (historyId != null) {
+                data = {id: historyId, playTime: timeAt};
+            } else {
+                data = {userId: 1, videoId: [[${video.id}]], playTime: timeAt};
+            }
+            saveStatus(data);
+            flag = false;
+        }
+    });
+
+    function saveStatus(data) {
+        console.info("发送数据", data)
+        $.post(/*[[@{/history/insertHv}]]*/, data, function (result) {
+            if (result.code == "00000") {
+                historyId = result.data;
+            }
+        }, "json");
+    }
+
+    function pauseOrEndPlay() {
+        data = {id: historyId, ended: 'yes'};
+        $.post(/*[[@{/history/insertHv}]]*/, data, function (result) {
+            if (result.code == "00000") {
+                historyId = result.data;
+            }
+        }, "json");
+    }
+</script>
+<p th:text="${video.playNum}"></p>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>视频分组列表</title>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" th:href="@{/css/videoGroup/listTable.css}" href="/css/videoGroup/listTable.css"/>
+    <link rel="stylesheet" href="/css/common.css" th:href="@{/css/common.css}"/>
+</head>
+<body>
+<table class="list_table">
+    <thead>
+    <tr>
+        <td>序号</td>
+        <td>分组名称</td>
+        <td>描述</td>
+        <td>操作</td>
+    </tr>
+    </thead>
+    <tbody th:each="group,groupSta : ${groups}">
+    <tr th:attr="id=${group.id}">
+        <td th:text="${groupSta.index+1}">1</td>
+        <td class="group_name" th:text="${group.groupName}">分组1</td>
+        <td class="group_detail" th:text="${group.groupDetail}">分组1</td>
+        <td><span class="editBtn" th:onclick="'javascript:show_edit_row(this)'">编辑</span>
+            &nbsp;<span class="delBtn" th:onclick="'javascript:delete_row(this)'">删除</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="btn_div">
+    <a th:href="@{/group/addGroup}">新增</a>
+</div>
+<script src="/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<!--<script src="../../static/js/groupList.js" th:src="@{/js/groupList.js}"></script>-->
+<script th:inline="javascript">
+    var groupName;
+    var groupDetail;
+    var editRow;
+
+    function delete_row(el) {
+        var row = $(el).parents('tr');
+        var id = $(row).attr("id");
+        var gn = $(row).find('.group_name').text();
+        var res = confirm("是否删除" + gn);
+        if (res) {
+            $.post(/*[[@{'/group/deleteGroup'}]]*/, {id: id}, function (result) {
+                if (result.code == '00000') {
+                    $(row).remove();
+                }
+            }, 'json');
+        }
+    }
+
+    function cancelEdit() {
+        $(editRow).find('.group_name').html(groupName);
+        $(editRow).find('.group_detail').html(groupDetail);
+        $(editRow).find('.editBtn').attr('onclick', 'show_edit_row(this)');
+        $(editRow).find('.editBtn').html("编辑");
+        groupName = null;
+        groupDetail = null;
+        editRow = null;
+    }
+
+    function show_edit_row(el) {
+        var newEditRow = $(el).parents('tr');
+        if (editRow != newEditRow) {
+            cancelEdit();
+            editRow = newEditRow;
+        }
+        groupName = $(editRow).find('.group_name').text();
+        groupDetail = $(editRow).find('.group_detail').text();
+        $(editRow).find('.group_name').html('<input name="groupName" value="' + groupName + '"/>');
+        $(editRow).find('.group_detail').html('<input name="groupDetail" value="' + groupDetail + '"/>');
+        $(el).attr('onclick', 'save_edit_row(this)');
+        $(el).html("保存");
+    }
+
+    function save_edit_row(el) {
+        var id = $(el).parents("tr").attr("id");
+        var gn = $(el).parents("tr").find("input[name=groupName]").val();
+        var gd = $(el).parents("tr").find("input[name=groupDetail]").val();
+        if (gn == '' || gn.length <= 0) {
+            alert("分组名称不能为空");
+        } else {
+            $.post(/*[[@{'/group/updateGroup'}]]*/, {id: id, groupName: gn, groupDetail: gd}, function (result) {
+                if (result.code == '00000') {
+                    groupName = gn;
+                    groupDetail = gd;
+                    cancelEdit();
+                    alert(result.msg);
+                }
+            }, 'json');
+        }
+    }
+
+
+</script>
+</body>
+</html>

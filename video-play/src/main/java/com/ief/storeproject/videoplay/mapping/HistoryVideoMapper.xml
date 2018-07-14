@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ief.storeproject.videoplay.mapping.HistoryVideoMapper">
+  <resultMap id="BaseResultMap" type="com.ief.storeproject.videoplay.vo.HistoryVideoVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="video_id" jdbcType="INTEGER" property="videoId" />
+    <result column="play_time" jdbcType="VARCHAR" property="playTime" />
+    <result column="video_name" jdbcType="VARCHAR" property="videoName" />
+    <result column="video_time" jdbcType="INTEGER" property="videoTime"/>
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="total_time" jdbcType="INTEGER" property="totalTime" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="delete_flag" jdbcType="SMALLINT" property="deleteFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, video_id, play_time, total_time, start_time, delete_flag
+  </sql>
+  <sql id="Column_List">
+    hv.id, hv.user_id, hv.video_id, hv.play_time, hv.total_time, hv.start_time, hv.delete_flag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from history_video
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    udpate history_video set delete_flag=1
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ief.storeproject.videoplay.mapping.entity.HistoryVideo">
+    insert into history_video (id, user_id, video_id, 
+      play_time, total_time, start_time, 
+      delete_flag)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{videoId,jdbcType=INTEGER}, 
+      #{playTime,jdbcType=VARCHAR}, #{totalTime,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{deleteFlag,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ief.storeproject.videoplay.mapping.entity.HistoryVideo">
+    insert into history_video
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="videoId != null">
+        video_id,
+      </if>
+      <if test="playTime != null">
+        play_time,
+      </if>
+      <if test="totalTime != null">
+        total_time,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="videoId != null">
+        #{videoId,jdbcType=INTEGER},
+      </if>
+      <if test="playTime != null">
+        #{playTime,jdbcType=VARCHAR},
+      </if>
+      <if test="totalTime != null">
+        #{totalTime,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteFlag != null">
+        #{deleteFlag,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ief.storeproject.videoplay.mapping.entity.HistoryVideo">
+    update history_video
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="videoId != null">
+        video_id = #{videoId,jdbcType=INTEGER},
+      </if>
+      <if test="playTime != null">
+        play_time = #{playTime,jdbcType=VARCHAR},
+      </if>
+      <if test="totalTime != null">
+        total_time = #{totalTime,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteFlag != null">
+        delete_flag = #{deleteFlag,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ief.storeproject.videoplay.mapping.entity.HistoryVideo">
+    update history_video
+    set user_id = #{userId,jdbcType=INTEGER},
+      video_id = #{videoId,jdbcType=INTEGER},
+      play_time = #{playTime,jdbcType=VARCHAR},
+      total_time = #{totalTime,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      delete_flag = #{deleteFlag,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectVoByExample" parameterType="com.ief.storeproject.videoplay.mapping.entity.HistoryVideo" resultMap="BaseResultMap">
+        select
+        <include refid="Column_List" />,vi.video_name,vi.video_time,vu.user_name
+        from history_video hv
+        left join video_info vi on hv.video_id=vi.id
+        left join video_user vu on hv.user_id=vu.id
+        <where>
+            <if test="userId != null">
+                and hv.user_id = #{userId,jdbcType=INTEGER}
+            </if>
+            <if test="videoId != null">
+                and hv.video_id = #{videoId,jdbcType=INTEGER}
+            </if>
+            <if test="deleteFlag != null">
+                and hv.delete_flag = #{deleteFlag,jdbcType=SMALLINT}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByExample" parameterType="com.ief.storeproject.videoplay.mapping.entity.HistoryVideo" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from history_video
+      <where>
+        <if test="userId != null">
+          and user_id = #{userId,jdbcType=INTEGER}
+        </if>
+        <if test="videoId != null">
+          and video_id = #{videoId,jdbcType=INTEGER}
+        </if>
+        <if test="deleteFlag != null">
+          and delete_flag = #{deleteFlag,jdbcType=SMALLINT}
+        </if>
+      </where>
+    </select>
+
+</mapper>
